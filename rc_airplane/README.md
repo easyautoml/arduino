@@ -18,12 +18,15 @@ Bài viết này mình sẽ hướng dẫn tạo bộ Transmitter và Re
 ## 2.2 Thiết bị
 
 **Thiết bị cần cho Transmitter**
+
 ![alt text](img/tx_devices.png)
 
 **Thiết bị cần cho Receiver**
+
 ![alt text](img/rx_devices.png)
 
 **Thiết bị điện cho máy bay**
+
 ![alt text](img/airplane_devices.png)
 
 
