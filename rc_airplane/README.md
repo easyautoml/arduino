@@ -55,7 +55,9 @@ Tham khảo bài viết tại đây để biết cách nạp chương trì
 http://arduino.vn/bai-viet/402-huong-dan-nap-chuong-trinh-don-gian-cho-arduino-uno-r3
 
 ## 3.1 Lập trình cho TX
-
+> TODO : Nội dung sẽ được update sớm
 
 ## 3.2 Lập trình cho RX
 
+# 4. Tạo mô hình máy bay
+> TODO : Nội dung sẽ được update sớm
