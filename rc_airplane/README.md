@@ -1,6 +1,9 @@
 # DIY RC Airplane
 
+*Projects hướng dẫn DIY một chiếc máy bay hoàn chỉnh từ A-Z*
+
 ![img.png](img.png)
+
 https://www.youtube.com/shorts/XCcPUDrcOQ8
 
 # 1. Nguyên lý và thiết bị
@@ -11,7 +14,7 @@ https://www.youtube.com/shorts/XCcPUDrcOQ8
 
 ![alt text](img/tx_rx_futaba.png)
 
-Bài viết này mình sẽ hướng dẫn tạo bộ Transmitter và Recevier với Arduino.
+Bài viết này mình sẽ hướng dẫn tạo bộ Transmitter và Receiver với Arduino.
 
 ## 1.1 Nguyên lý 
 
