@@ -1,3 +1,8 @@
+# DIY RC Airplane 
+
+![img.png](img.png)
+https://www.youtube.com/shorts/XCcPUDrcOQ8
+
 # 1. Nguyên lý và thiết bị
 
 Để điều khiển máy bay, bộ điều khiển cần 2 thiết bị gồm : 
