@@ -1,4 +1,4 @@
-# DIY RC Airplane 
+# DIY RC Airplane
 
 ![img.png](img.png)
 https://www.youtube.com/shorts/XCcPUDrcOQ8
