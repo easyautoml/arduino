@@ -148,5 +148,96 @@ https://github.com/easyautoml/arduino/blob/main/rc_airplane/transmitter/transmit
 
 ## 3.2 Lập trình cho RX
 
+### 3.2.1 Nhận dữ liệu truyền từ TX
+
+*Tại RX, ta cũng sử dụng mạch NRFL01 để nhận tín hiệu, để tránh sự cố đáng tiếc, bạn chú ý tới xử lý khi máy bay bị mất tín hiệu từ TX, bắt buộc phải cho motor ngừng quay*
+
+```
+#include <RF24.h>
+
+RF24 radio(9, 10);   // nRF24L01 (CE, CSN)
+const byte address[6] = "00001";
+
+unsigned long lastReceiveTime = 0;
+unsigned long currentTime = 0;
+
+void setup() 
+{
+  ...
+  // Setup Radio 
+  
+  radio.begin();
+  radio.openReadingPipe(0, address);
+  radio.setAutoAck(false);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_LOW);
+  radio.startListening(); //  Set the module as receiver
+}
+
+void loop()
+{
+  
+  // Nhận tín hiệu được gửi từ TX
+  Data data;
+  
+  if (radio.available()) {
+    radio.read(&data, sizeof(Data)); // Read the whole data and store it into the 'data' structure
+    lastReceiveTime = millis(); // At this moment we have received the data
+  }
+  
+  // Xử lý khi bị mất tín hiệu
+  currentTime = millis();
+  boolean lost_signal = currentTime - lastReceiveTime > 1000;
+  
+  if ( lost_signal ) {
+      // khi bị mất tín hiệu, set motor về 0 để motor ngừng hoạt động
+      motor_control(0); 
+  }
+
+```
+
+### 3.3 Điều khiển cánh máy bay
+
+- Để điều hướng máy bay, ta sử dụng 2 Servo (1 dạng motor nhưng có thể lập trình để quay 1 góc nhất định)
+- Servo mình sử dụng là loại đặc biệt, nên chỉ nhận giá trị từ 30-180 thay vì 0-180 như các servo khác. 
+- Servo sử dụng tín hiệu Digital - PWM , vì vậy ta cần dùng các Port Digital có kí hiệu ~ như 3,5,6,9,10,11. 
+
+```
+
+void servo_control(JoyStick joy_stick, Spin spin){  
+  /* 
+   *  MINI SERVO ANGLE FROM 30 - 180. NOT FROM 0 - 180
+   *  NEED PMW PINOUT TO CONTROL SERVO. ARDUINO MINI PMW OUTPUT PIN : D3, D5, D6, D9, D10, D11
+  */
+
+  byte left_right = map(joy_stick.y, 0, 255, 30, 180);
+
+  joy_stick.x = joy_stick_convert_direction(joy_stick.x);
+  
+  byte up_down = map(joy_stick.x, 0, 255, 30, 180);
+  
+  byte midle_place = 124;
+  
+  if (joy_stick.y != midle_place){
+    SERVO1.write(left_right);
+    SERVO2.write(left_right);
+  }
+  else{
+    // Up and down   
+    SERVO1.write(up_down);
+
+   up_down = map(up_down, 30, 180, 180, 30);
+
+   Serial.print(" UP DOWN : ");
+   Serial.println(joy_stick.y);
+  
+    SERVO2.write(up_down);
+  }
+}
+```
+
+### 3.4 Điều khiển động cơ (Motor)
+> TODO : Add code điều khiển motor
+
 # 4. Tạo mô hình máy bay
 > TODO : Nội dung sẽ được update sớm
