@@ -58,9 +58,9 @@ Tham khảo bài viết tại đây để biết cách nạp chương trì
 http://arduino.vn/bai-viet/402-huong-dan-nap-chuong-trinh-don-gian-cho-arduino-uno-r3
 
 ## 3.1 Lập trình cho TX
-> TODO : Nội dung sẽ được update sớm
 
-**Joy Stick**
+### 3.1 Xử lý tín hiệu từ Joy Stick
+
 *Lưu ý với Joy Stick*
 - Joy Stick truyền tín hiệu Analog, vì vậy cần sử dụng Port A0 - A5 trên mạch Arduino.
 - 1 Joy Stick gửi 2 tín hiệu tương ứng trục X và Y, với Joy Stick 1 ta dùng cổng A0 - A1, Joy Stick 2 dùng A3 và A4
@@ -69,14 +69,13 @@ http://arduino.vn/bai-viet/402-huong-dan-nap-chuong-trinh-don-gian-cho-arduino-u
 
 ```
 // Định nghĩa port sử dụng nhận tín hiệu từ Joy Stick
-// Joy Stick 1
 #define STICK1_X  A0 // Arduino pin connected to VRX pin
 #define STICK1_Y  A1 // Arduino pin connected to VRY pin
-// Joy Stick 2
+
 #define STICK2_X  A2 // Arduino pin connected to VRX pin
 #define STICK2_Y  A3 // Arduino pin connected to VRY pin
 
-// Định nghĩa Joy Stick lưu trữ 2 trục X và Y
+// Tạo stuck lưu thông tin của 1 joy stick
 struct JoyStick{
   byte x;
   byte y;
@@ -101,6 +100,52 @@ JoyStick read_joy_stick(int stick_num){
   return stick;
 }
 ```
+
+### 2.2 Gửi tín hiệu Radio
+
+*Ta sử dụng module nRF24L01 để truyền tín hiệu từ TX tới RX*
+
+```
+#include <RF24.h>
+
+// Khai báo port sử dung truyền tín hiệu tới Radio
+RF24 radio(8, 10);   // nRF24L01 (CE, CSN)
+
+// Dữ liệu của stick 1 và stick 2 sẽ được lưu vào biến struct Data, sau đó gửi qua Radio
+struct Data{
+  JoyStick joy_stick_1;
+  JoyStick joy_stick_2;
+  Spin spin;
+};
+
+void setup() 
+{
+  Serial.begin(9600);
+
+  // Setup Radio
+  radio.begin();
+  radio.openWritingPipe(address);
+  radio.setAutoAck(false);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_LOW);
+  
+}
+
+// Function gửi tín hiệu 
+void send_data(){
+
+  struct Data data;
+  data.joy_stick_1 = read_joy_stick(1);
+  data.joy_stick_2 = read_joy_stick(2);
+  data.spin = read_spin();
+
+  radio.write(&data, sizeof(Data));
+}
+```
+
+*Code hoàn chỉnh của TX các bạn tham khảo tại đây*
+https://github.com/easyautoml/arduino/blob/main/rc_airplane/transmitter/transmitter.ino
+
 ## 3.2 Lập trình cho RX
 
 # 4. Tạo mô hình máy bay
