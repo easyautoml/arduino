@@ -60,6 +60,47 @@ http://arduino.vn/bai-viet/402-huong-dan-nap-chuong-trinh-don-gian-cho-arduino-u
 ## 3.1 Lập trình cho TX
 > TODO : Nội dung sẽ được update sớm
 
+**Joy Stick**
+*Lưu ý với Joy Stick*
+- Joy Stick truyền tín hiệu Analog, vì vậy cần sử dụng Port A0 - A5 trên mạch Arduino.
+- 1 Joy Stick gửi 2 tín hiệu tương ứng trục X và Y, với Joy Stick 1 ta dùng cổng A0 - A1, Joy Stick 2 dùng A3 và A4
+- Joy Stick trả về giá trị từ 0 - 1024, khi ở vị trí thấp nhất, giá trị ta nhận được là 0 và khi ở vị trí cao nhất, ta nhận được giá trị 1024
+
+
+```
+// Định nghĩa port sử dụng nhận tín hiệu từ Joy Stick
+// Joy Stick 1
+#define STICK1_X  A0 // Arduino pin connected to VRX pin
+#define STICK1_Y  A1 // Arduino pin connected to VRY pin
+// Joy Stick 2
+#define STICK2_X  A2 // Arduino pin connected to VRX pin
+#define STICK2_Y  A3 // Arduino pin connected to VRY pin
+
+// Định nghĩa Joy Stick lưu trữ 2 trục X và Y
+struct JoyStick{
+  byte x;
+  byte y;
+};
+
+
+// Function nhận tín hiệu từ Joy Stick, lưu vào biến stick
+JoyStick read_joy_stick(int stick_num){
+
+  struct JoyStick stick;
+
+  switch (stick_num){
+    case 1:
+      stick.x =  map(analogRead(STICK1_X), 0, 1023, 0, 255);
+      stick.y =  map(analogRead(STICK1_Y), 0, 1023, 0, 255);
+      break;
+    case 2:
+      stick.x =  map(analogRead(STICK2_X), 0, 1023, 0, 255);
+      stick.y =  map(analogRead(STICK2_Y), 0, 1023, 0, 255);
+      break;
+  }
+  return stick;
+}
+```
 ## 3.2 Lập trình cho RX
 
 # 4. Tạo mô hình máy bay
