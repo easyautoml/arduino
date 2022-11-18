@@ -61,6 +61,10 @@ http://arduino.vn/bai-viet/402-huong-dan-nap-chuong-trinh-don-gian-cho-arduino-u
 
 ### 3.1 Xử lý tín hiệu từ Joy Stick
 
+Trên TX gồm 2 Joy Stick, 1 joy stick dùng điều khiển tốc độ máy bay, joy stick còn lại dùng để lái qua trái phải. 
+
+Mỗi joy stick lại chứa thông tin (x, y) được lưu trữ thông qua biến `JoyStick`. Cả 2 Joy Stick sẽ được lưu vào biến `Data` và được gửi liên tục qua RX. 
+
 *Lưu ý với Joy Stick*
 - Joy Stick truyền tín hiệu Analog, vì vậy cần sử dụng Port A0 - A5 trên mạch Arduino.
 - 1 Joy Stick gửi 2 tín hiệu tương ứng trục X và Y, với Joy Stick 1 ta dùng cổng A0 - A1, Joy Stick 2 dùng A3 và A4
@@ -89,7 +93,7 @@ JoyStick read_joy_stick(int stick_num){
 
   switch (stick_num){
     case 1:
-      stick.x =  map(analogRead(STICK1_X), 0, 1023, 0, 255);
+      stick.x =  map(analogRead(STICK1_X), 0, 1023, 0, 255);   # Convert value joy stick về khoảng [0;255]
       stick.y =  map(analogRead(STICK1_Y), 0, 1023, 0, 255);
       break;
     case 2:
@@ -115,7 +119,6 @@ RF24 radio(8, 10);   // nRF24L01 (CE, CSN)
 struct Data{
   JoyStick joy_stick_1;
   JoyStick joy_stick_2;
-  Spin spin;
 };
 
 void setup() 
@@ -134,10 +137,11 @@ void setup()
 // Function gửi tín hiệu 
 void send_data(){
 
+  # Đóng gói dữ liệu
   struct Data data;
+ 
   data.joy_stick_1 = read_joy_stick(1);
   data.joy_stick_2 = read_joy_stick(2);
-  data.spin = read_spin();
 
   radio.write(&data, sizeof(Data));
 }
@@ -204,7 +208,7 @@ void loop()
 
 ```
 
-void servo_control(JoyStick joy_stick, Spin spin){  
+void servo_control(JoyStick joy_stick){  
   /* 
    *  MINI SERVO ANGLE FROM 30 - 180. NOT FROM 0 - 180
    *  NEED PMW PINOUT TO CONTROL SERVO. ARDUINO MINI PMW OUTPUT PIN : D3, D5, D6, D9, D10, D11
@@ -218,19 +222,15 @@ void servo_control(JoyStick joy_stick, Spin spin){
   
   byte midle_place = 124;
   
+  // Bay trái phải
   if (joy_stick.y != midle_place){
     SERVO1.write(left_right);
     SERVO2.write(left_right);
   }
   else{
-    // Up and down   
+  // Bay lên và xuống    
     SERVO1.write(up_down);
-
-   up_down = map(up_down, 30, 180, 180, 30);
-
-   Serial.print(" UP DOWN : ");
-   Serial.println(joy_stick.y);
-  
+    up_down = map(up_down, 30, 180, 180, 30);
     SERVO2.write(up_down);
   }
 }
