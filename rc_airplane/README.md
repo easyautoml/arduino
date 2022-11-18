@@ -264,7 +264,7 @@ Có rất nhiều clip hướng dẫn trên youtube, bạn có thể sear
 
 Tuy nhiên mình chọn build theo mẫu F22 với một số lý do : 
 - Motor đặt phía sau máy bay, khi đâm đụng thì thiệt hại sẽ nhỏ hơn máy bay đặt motor phía trước
-- Sử dụng 2 Servo để điều khiển bay trái phải, Arduino cũng chỉ đủ port để điều khiển 2 servo.
+- Mẫu F22 chỉ cần sử dụng 2 Servo để điều khiển đuôi máy bay, Arduino Nano cũng chỉ đủ port để điều khiển 2 servo.
 
 https://www.youtube.com/watch?v=iQsswBpzjpo
 https://www.youtube.com/watch?v=9SMyBN-B3Vo&t=227s
