@@ -237,7 +237,43 @@ void servo_control(JoyStick joy_stick){
 ```
 
 ### 3.4 Điều khiển động cơ (Motor)
-> TODO : Add code điều khiển motor
+
+Truyền tín hiệu với giá trị từ 0-180 để điều khiển tốc độ motor. 
+**Lưu ý :**
+- Để tránh bị cháy ESC, không nên cho motor chạy với công suất tối đa, vì vậy mình set giá trị nếu > 170 thì cho tốc độ motor = 170.
+
+```
+void motor_control(int rotary_value){
+  /* 
+   *  MOTOR GET VALUE FROM 0 - 180.
+   *  NEED PMW PINOUT TO CONTROL SERVO. ARDUINO MINI PMW OUTPUT PIN : D3, D5, D6, D9, D10, D11
+  */
+  rotary_value = map(rotary_value, 0, 255, 0, 180);
+
+  // Limit motor performance
+  if (rotary_value>170){
+    rotary_value = 170;
+  }
+  
+  MOTOR.write(rotary_value); 
+}
+```
 
 # 4. Tạo mô hình máy bay
-> TODO : Nội dung sẽ được update sớm
+Có rất nhiều clip hướng dẫn trên youtube, bạn có thể search với từ khóa Build RC Airplane.
+
+Tuy nhiên mình chọn build theo mẫu F22 với một số lý do : 
+- Motor đặt phía sau máy bay, khi đâm đụng thì thiệt hại sẽ nhỏ hơn máy bay đặt motor phía trước
+- Sử dụng 2 Servo để điều khiển bay trái phải, Arduino cũng chỉ đủ port để điều khiển 2 servo.
+
+https://www.youtube.com/watch?v=iQsswBpzjpo
+https://www.youtube.com/watch?v=9SMyBN-B3Vo&t=227s
+https://www.youtube.com/watch?v=ArG40D8KHTA
+
+Một số điều mà không video nào chia sẽ khi chế máy bay: 
+- Điều chỉnh Pin, thiết bị điện sao cho máy bay cân bằng trái và phải (Tức máy bay không được phép nghiêng qua trái, cũng như phải)
+- Tìm điểm center of gravity. Tức là điểm mà tại đó, máy bay không bị cắm đầu xuống cũng như ngữa lên. Theo kinh nghiệm thì chọn vị trí 1/3 cánh tính từ mũi máy bay làm Center of gravity. Hoặc thử sai cũng là cách tốt, mình đã phải thử tới lần thứ 10 máy bay mới bắt đầu bay lên được. 
+- Hướng motor phải song song theo thân máy bay, nếu như bạn không muốn máy bay bay theo phương chéo. 
+
+
+
